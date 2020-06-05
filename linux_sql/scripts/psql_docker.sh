@@ -8,7 +8,7 @@ db_password=$3
 # if docker deamon is not running start it
 systemctl status docker || systemctl start docker
 
-if [ "$command" == "create" ]; then
+if [ "$cmd" == "create" ]; then
   # if jrvs-psql is already created
   if [ $(docker container ls -a -f name=jrvs-psql | wc -l) -eq 2 ]; then
     echo "jrvs-psql already created"
@@ -22,21 +22,24 @@ if [ "$command" == "create" ]; then
 
   docker pull postgres
   docker volume create pgdata
-  docker run --name jrvs-psql -e POSTGRES_PASSWORD=$(db_password) -e POSTGRES_USER=$(db_username) -d -v pgdata:/var/lib/postgresql/data -p 5432:5432 postgres
+  docker run --name jrvs-psql -e POSTGRES_PASSWORD=${db_password} -e POSTGRES_USER=${db_username} -d -v pgdata:/var/lib/postgresql/data -p 5432:5432 postgres
   exit $?
 fi
 
-if [ $(docker container ls -a -f name=jrvs-psql | wc -l) -eq 1 ]; then
+if [ "$cmd" == "start" ]; then
+  if [ $(docker container ls -a -f name=jrvs-psql | wc -l) -eq 1 ]; then
     echo "Error: jrvs-psql is not created"
     exit 1
-fi
-
-if [ "$command" == "start" ]; then
+  fi
   docker container start jrvs-psql
   exit $?
 fi
 
-if [ "$command" == "stop" ]; then
+if [ "$cmd" == "stop" ]; then
+  if [ $(docker container ls -a -f name=jrvs-psql | wc -l) -eq 1 ]; then
+    echo "Error: jrvs-psql is not created"
+    exit 1
+  fi
   docker container stop jrvs-psql
   exit $?
 fi
