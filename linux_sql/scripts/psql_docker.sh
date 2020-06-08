@@ -26,20 +26,18 @@ if [ "$cmd" == "create" ]; then
   exit $?
 fi
 
-if [ "$cmd" == "start" ]; then
-  if [ $(docker container ls -a -f name=jrvs-psql | wc -l) -eq 1 ]; then
+# TODO: better option would be to use switch
+if [ $(docker container ls -a -f name=jrvs-psql | wc -l) -eq 1 ]; then
     echo "Error: jrvs-psql is not created"
     exit 1
   fi
+
+if [ "$cmd" == "start" ]; then
   docker container start jrvs-psql
   exit $?
 fi
 
 if [ "$cmd" == "stop" ]; then
-  if [ $(docker container ls -a -f name=jrvs-psql | wc -l) -eq 1 ]; then
-    echo "Error: jrvs-psql is not created"
-    exit 1
-  fi
   docker container stop jrvs-psql
   exit $?
 fi
