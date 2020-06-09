@@ -19,7 +19,7 @@ meminfo_out=`cat /proc/meminfo`
 hostname=$(hostname -f)
 cpu_number=$(echo "$lscpu_out" | egrep "^CPU\(s\):" | awk '{print $2}' | xargs)
 cpu_architecture=$(echo "$lscpu_out" | egrep "^Architecture:" | awk '{print $2}')
-cpu_model=$(echo "($lscpu_out)" | egrep "^Model name:" | awk '{for (i=3; i<NF; i++) print $i}' | xargs)
+cpu_model=$(echo "($lscpu_out)" | egrep "^Model name:" | awk '{for (i=3; i<NF+1; i++) print $i}' | xargs)
 cpu_mhz=$(echo "($lscpu_out)" | egrep "^CPU MHz:" | awk '{print $3}' | xargs)
 l2_cache=$(echo "($lscpu_out)" | egrep "^L2 cache:" | awk '{print $3}' | xargs | sed 's/[^0-9]*//g')
 total_mem=$(echo "($meminfo_out)" | egrep "MemTotal:" | awk '{print $2}' | xargs)
@@ -28,5 +28,5 @@ total_mem=$(echo "($meminfo_out)" | egrep "MemTotal:" | awk '{print $2}' | xargs
 timestamp=$(date '+%Y-%m-%d %H:%M:%S')
 
 # Insert a row into host_info table
-sql_insert="INSERT INTO host_info (hostname, cpu_number, cpu_architecture, cpu_model, cpu_mhz, l2_cache, total_mem, timestamp) VALUES  ($hostname, $cpu_number, $cpu_architecture, $cpu_model, $cpu_mhz, $l2_cache, $total_mem, $timestamp)"
+sql_insert="INSERT INTO host_info (hostname, cpu_number, cpu_architecture, cpu_model, cpu_mhz, l2_cache, total_mem, timestamp) VALUES  ('$hostname', $cpu_number, '$cpu_architecture', '$cpu_model', $cpu_mhz, $l2_cache, $total_mem, '$timestamp')"
 psql -h $psql_host -p $psql_port -U $psql_user -d $db_name -c "$sql_insert"
