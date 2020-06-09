@@ -12,14 +12,17 @@ if [ $# -ne 5 ]; then
   exit 1
 fi
 
+df_out=`df -BM /`
+vmstat_out=`vmstat -t --unit M`
+
 # current timestamp in `2019-11-26 14:40:19` format
 timestamp=$(date '+%Y-%m-%d %H:%M:%S')
 host_id=1
-memory_free=256
-cpu_idle=95
-cpu_kernel=0
-disk_io=0
-disk_available=31220
+memory_free=$(echo "$vmstat_out" | awk '{print $4}' | egrep -o '[0-9]*')
+cpu_idle=$(echo "$vmstat_out" | awk '{print $15}' | egrep -o '[0-9]*')
+cpu_kernel=$(echo "$vmstat_out" | awk '{print $14}' | egrep -o '[0-9]*')
+disk_io=$(vmstat -d | awk '{print $10}' | egrep -o '[0-9]*')
+disk_available=$(echo "$df_out" | awk '{print $4}' | egrep -o '[0-9]*')
 
 # Insert a row into host_usage table
 sql_insert="INSERT INTO host_usage (timestamp, host_id, memory_free, cpu_idle, cpu_kernel, disk_io, disk_available) VALUES ('$timestamp', $host_id, $memory_free, $cpu_idle, $cpu_kernel, '$disk_io', $disk_available)"
