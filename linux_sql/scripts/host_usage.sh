@@ -14,6 +14,7 @@ fi
 
 df_out=`df -BM /`
 vmstat_out=`vmstat -t --unit M`
+vmstatd_out=`vmstat -d`
 
 hostname=$(hostname -f)
 
@@ -22,7 +23,7 @@ timestamp=$(date '+%Y-%m-%d %H:%M:%S')
 memory_free=$(echo "$vmstat_out" | awk '{print $4}' | egrep -o '[0-9]*')
 cpu_idle=$(echo "$vmstat_out" | awk '{print $15}' | egrep -o '[0-9]*')
 cpu_kernel=$(echo "$vmstat_out" | awk '{print $14}' | egrep -o '[0-9]*')
-disk_io=$(echo "$vmstat_out" | awk '{print $10}' | egrep -o '[0-9]*')
+disk_io=$(echo "$vmstatd_out" | awk '{print $10}' | egrep -o '[0-9]*')
 disk_available=$(echo "$df_out" | awk '{print $4}' | egrep -o '[0-9]*')
 
 # Precondition: corresponding host_info row exists

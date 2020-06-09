@@ -37,7 +37,6 @@ timestamp=$(date '+%Y-%m-%d %H:%M:%S')
 
 # Insert a row into host_info table
 sql_insert="INSERT INTO host_info (hostname, cpu_number, cpu_architecture, cpu_model, cpu_mhz, l2_cache, total_mem, timestamp) VALUES  ('$hostname', $cpu_number, '$cpu_architecture', '$cpu_model', $cpu_mhz, $l2_cache, $total_mem, '$timestamp')"
-echo "$sql_insert"
 PGPASSWORD=$psql_password psql -h $psql_host -p $psql_port -U $psql_user -d $db_name -c "$sql_insert"
 
 exit $?
