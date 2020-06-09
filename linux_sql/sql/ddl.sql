@@ -2,7 +2,7 @@
 
 CREATE TABLE IF NOT EXISTS PUBLIC.host_info (
   id SERIAL NOT NULL,
-  hostname VARCHAR NOT NULL,
+  hostname VARCHAR NOT NULL UNIQUE,
   cpu_number INT NOT NULL,
   cpu_architecture VARCHAR NOT NULL,
   cpu_model VARCHAR NOT NULL,
