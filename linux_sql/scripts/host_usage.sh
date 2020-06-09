@@ -23,4 +23,4 @@ disk_available=31220
 
 # Insert a row into host_usage table
 sql_insert="INSERT INTO host_usage (timestamp, host_id, memory_free, cpu_idle, cpu_kernel, disk_io, disk_available) VALUES ('$timestamp', $host_id, $memory_free, $cpu_idle, $cpu_kernel, '$disk_io', $disk_available)"
-psql -h $psql_host -p $psql_port -U $psql_user -d $db_name -c "$sql_insert"
+PGPASSWORD=$psql_password psql -h $psql_host -p $psql_port -U $psql_user -d $db_name -c "$sql_insert"
