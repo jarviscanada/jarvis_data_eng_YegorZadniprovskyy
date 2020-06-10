@@ -7,7 +7,7 @@ can enable a more efficient resource usage monitoring/management in the Linux cl
 
 ## Architecture & Design
 ### Architecture Diagram
-Draw a cluster diagram with three Linux hosts, a DB, and agents (use draw.io website). Image must be saved to `assets` directory.
+![Diagram](./assets/diagram.png)
 
 ### Database & Tables
 - `host_info` table contains overall/static information about the hosts
